@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Administración · Usuarios{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h3 class="mb-0">Usuarios</h3>
+  <form class="d-flex" method="get">
+    <input class="form-control me-2" name="q" placeholder="Buscar usuario/email" value="{{ q or '' }}">
+    <button class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+  </form>
+</div>
+
+<div class="table-responsive shadow-sm bg-white rounded-3">
+  <table class="table table-hover align-middle mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Activo</th>
+        <th>Roles</th>
+        <th style="width:120px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for idu, login, email, activo, roles in rows %}
+      <tr>
+        <td class="text-muted">{{ idu }}</td>
+        <td class="fw-semibold">{{ login }}</td>
+        <td>{{ email }}</td>
+        <td>
+          {% if activo %}<span class="badge text-bg-success">Sí</span>
+          {% else %}<span class="badge text-bg-secondary">No</span>{% endif %}
+        </td>
+        <td>{{ roles or '' }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-primary" href="{{ url_for('admin.editar_usuario', id_usuario=idu) }}">
+            <i class="bi bi-pencil-square me-1"></i> Editar
+          </a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Sin resultados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

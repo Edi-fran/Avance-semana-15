@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Editar usuario{% endblock %}
+{% block content %}
+{% set idu, nombre, login, email, activo, mfa = u %}
+
+<div class="mb-4">
+  <h3 class="mb-1">Editar usuario</h3>
+  <div class="text-muted">ID: {{ idu }}</div>
+</div>
+
+<form class="card shadow-sm border-0" method="post"
+      action="{{ url_for('admin.actualizar_usuario', id_usuario=idu) }}">
+  <div class="card-body p-4">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-control" name="nombre_completo" value="{{ nombre }}" required>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Usuario (login)</label>
+        <input class="form-control" name="usuario_login" value="{{ login }}" required>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" value="{{ email }}" required>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Nueva contraseña</label>
+        <input type="password" class="form-control" name="password" placeholder="Dejar en blanco para no cambiar">
+        <div class="form-text">Si la dejas vacía, se conserva la actual.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Rol</label>
+        <select class="form-select" name="rol">
+          {# Solo un rol: administrador o facturador. Marcamos el que ya tenga #}
+          {% for id_rol, nombre_rol in roles %}
+            <option value="{{ nombre_rol }}" {{ 'selected' if id_rol in roles_usuario else '' }}>
+              {{ nombre_rol|capitalize }}
+            </option>
+          {% endfor %}
+        </select>
+        <div class="form-text">El usuario tendrá solo el rol seleccionado.</div>
+      </div>
+
+      <div class="col-md-2 d-flex align-items-end">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" name="activo" value="1" id="chActivo"
+                 {{ 'checked' if activo else '' }}>
+          <label class="form-check-label" for="chActivo">Activo</label>
+        </div>
+      </div>
+
+      <div class="col-md-2 d-flex align-items-end">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" name="mfa_habilitado" value="1" id="chMfa"
+                 {{ 'checked' if mfa else '' }}>
+          <label class="form-check-label" for="chMfa">MFA habilitado</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer bg-light d-flex justify-content-between">
+    <a class="btn btn-outline-secondary" href="{{ url_for('admin.usuarios') }}">
+      <i class="bi bi-arrow-left me-1"></i> Volver
+    </a>
+    <button class="btn btn-primary">
+      <i class="bi bi-save me-1"></i> Guardar cambios
+    </button>
+  </div>
+</form>
+{% endblock %}

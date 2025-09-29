@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo or 'Acerca de' }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <h1 class="mb-3">Acerca de</h1>
+    <p>Proyecto académico con Flask para demostrar rutas, plantillas y despliegue.</p>
+  </div>
+</section>
+{% endblock %}

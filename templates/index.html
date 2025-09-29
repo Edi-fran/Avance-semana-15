@@ -1,160 +1,214 @@
-﻿<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mi Proyecto Flask — UEA</title>
+﻿{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Estilos propios -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
-</head>
-<body class="bg-body">
+<!-- Hero / Acciones rápidas -->
+<div class="p-4 p-md-5 mb-4 bg-white border rounded-3 shadow-sm">
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+    <div>
+      <h2 class="fw-bold mb-1">
+        Bienvenido{% if current_user.is_authenticated %}, {{ current_user.usuario_login }}{% endif %}
+      </h2>
+      <p class="text-muted mb-0">Gestiona órdenes, abonos y facturación de manera rápida.</p>
+    </div>
 
-  <!-- Topbar -->
-  <nav class="navbar navbar-dark navbar-expand-lg bg-dark sticky-top shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-        <span class="brand-dot"></span>
-        FlaskApp
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="navMain" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="/usuario/Edilson">Demo usuario</a></li>
-          <li class="nav-item"><a class="nav-link" href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Docs Flask</a></li>
-          <li class="nav-item"><a class="nav-link" href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
-        </ul>
-      </div>
+    <div class="d-flex flex-wrap gap-2">
+      {% if has_role('administrador') or has_role('facturador') %}
+        <a class="btn btn-primary" href="{{ url_for('orden.nueva') }}">
+          <i class="bi bi-clipboard-plus me-1"></i> Nueva orden
+        </a>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#facturarModal">
+          <i class="bi bi-receipt me-1"></i> Facturar
+        </button>
+      {% endif %}
     </div>
-  </nav>
+  </div>
+</div>
 
-  <!-- Encabezado institucional -->
-  <header class="py-4 bg-gradient-uea border-bottom">
-    <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
-      <div class="d-flex align-items-center gap-3">
-        <img
-          src="https://www.uea.edu.ec/web/v2/wp-content/uploads/2023/10/logotipo-UEA-PNG-COLOR-NORMAL-OFICIAL-1-1024x297.png"
-          alt="Universidad Estatal Amazónica - UEA" class="logo-uea">
-        <div class="small text-secondary lh-sm">
-          <div class="fw-semibold text-uppercase">Facultad de Ciencias de la Educación</div>
-          <div>Ingeniería en Tecnologías de la Información</div>
-          <div>Asignatura: <span class="fw-semibold">Desarrollo de Aplicaciones Web</span></div>
-          <div>Docente: <span class="fw-semibold">Ing. Walter Rodrigo Núñez Zamora</span></div>
-          <div class="text-muted">Tema: <span class="fw-semibold">Aplicación Flask básica con rutas y despliegue</span></div>
-        </div>
-      </div>
-      <div class="text-end">
-        <span class="badge rounded-pill text-bg-primary px-3 py-2 shadow-sm">Proyecto académico</span>
-      </div>
-    </div>
-  </header>
+<!-- Tarjetas del panel -->
+<div class="row row-cols-1 row-cols-md-3 g-4">
 
-  <!-- Hero -->
-  <section class="py-5 hero-surface">
-    <div class="container-fluid fullscreen">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-7">
-          <h1 class="display-5 fw-bold mb-2">
-            Bienvenido, <span class="text-gradient">Edilson</span>
-          </h1>
-          <p class="lead text-secondary mb-4">
-            Esta es la página principal de mi proyecto Flask. Frontend simple, elegante y listo para crecer.
-          </p>
-          <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-primary btn-lg shadow-sm" href="/usuario/Edilson">
-              Probar ruta dinámica
-            </a>
-            <a class="btn btn-outline-secondary btn-lg" href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">
-              Documentación Flask
-            </a>
-          </div>
-           <div class="image-container">
-        <img 
-            src=" https://www.nanmagazine.com/wp-content/uploads/2019/10/pub-uni-estatal-amazonica-02.jpg" 
-            alt="Campus Universidad Estatal Amazónica"
-            class="responsive-image"
-        >
-        <div class="image-caption">Sede principal de la Universidad Estatal Amazónica</div>
-    </div>
-         
-        </div>
-        <div class="col-lg-5">
-          <div class="card card-glass shadow-lg">
-            <div class="card-body">
-              <h5 class="card-title mb-3">Estado de la app</h5>
-              <ul class="list-unstyled small mb-0">
-                <li class="mb-2">✅ Flask corriendo</li>
-                <li class="mb-2">✅ Rutas dinámicas</li>
-                <li class="mb-2">✅ Templates &amp; Static</li>
-                <li class="mb-2">✅ Listo para Render</li>
-              </ul>
-            </div>
-          </div>
-    </div>
-        </div>
-      </div>
-        <div class="image-container">
-        <img 
-            src="https://i1.wp.com/ninaradiofm.com/wp-content/uploads/2020/06/uni-estatal-amazonica-01.jpg?fit=1200%2C675&ssl=1" 
-            alt="Campus Universidad Estatal Amazónica"
-            class="responsive-image"
-        >
-        <div class="image-caption"> Universidad Estatal Amazónica</div>
-    </div>
-    
-  </section>
+  {% if has_role('administrador') or has_role('facturador') %}
+  <!-- Órdenes -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-clipboard-check fs-1 text-warning mb-3"></i>
+        <h5 class="card-title">Órdenes de trabajo</h5>
+        <p class="card-text text-muted">Crear orden, registrar abonos e imprimir OT.</p>
+        <a href="{{ url_for('orden.nueva') }}" class="btn btn-warning text-white">
+          <i class="bi bi-clipboard-plus me-1"></i> Ir
+        </a>
 
-  <!-- Features -->
-  <section class="py-5">
-    <div class="container">
-      <div class="row g-4 text-center">
-        <div class="col-md-4">
-          <div class="feature-card h-100 p-4 border rounded-4">
-            <div class="icon-bubble mb-3">⚡</div>
-            <h4 class="fw-semibold mb-2">Rápida</h4>
-            <p class="text-secondary mb-0">Carga ligera y estilos sin dependencias pesadas.</p>
+        <!-- NUEVO: Imprimir OT rápida -->
+        <hr class="my-3">
+        <div class="text-start">
+          <label class="form-label small text-muted mb-1">Imprimir OT rápida</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text">#</span>
+            <input id="ot-print-id" type="number" min="1" class="form-control" placeholder="N° de OT">
+            <button class="btn btn-outline-secondary" type="button" onclick="gotoImprimirOT()">
+              <i class="bi bi-printer me-1"></i> Imprimir
+            </button>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="feature-card h-100 p-4 border rounded-4">
-            <div class="icon-bubble mb-3">🧩</div>
-            <h4 class="fw-semibold mb-2">Escalable</h4>
-            <p class="text-secondary mb-0">
-              Estructura clara: <code>templates/</code> y <code>static/</code>.
-            </p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-card h-100 p-4 border rounded-4">
-            <div class="icon-bubble mb-3">🚀</div>
-            <h4 class="fw-semibold mb-2">Productiva</h4>
-            <p class="text-secondary mb-0">Lista para integrar tu lógica y vistas.</p>
-          </div>
-        </div>
+        <!-- /NUEVO -->
       </div>
     </div>
-  </section>
+  </div>
 
-
-  <!-- Footer -->
-  <footer class="bg-dark text-white py-3 mt-auto">
-    <div class="container small d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
-      <p class="mb-0 opacity-75">© 2025 Universidad Estatal Amazónica — Proyecto Flask</p>
-      <p class="mb-0 opacity-75">Desplegado con ❤️ · Demo: <a class="link-light text-decoration-underline" href="/usuario/Edilson">/usuario/Edilson</a></p>
+  <!-- Facturación -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-receipt fs-1 text-primary mb-3"></i>
+        <h5 class="card-title">Facturación</h5>
+        <p class="card-text text-muted">Emitir factura con IVA 15% e imprimir.</p>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#facturarModal">
+          <i class="bi bi-arrow-right-circle me-1"></i> Facturar
+        </a>
+      </div>
     </div>
-  </footer>
+  </div>
+  {% endif %}
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- JS propio -->
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+  <!-- Cliente -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-person-circle fs-1 text-primary mb-3"></i>
+        <h5 class="card-title">Cliente</h5>
+        <p class="card-text text-muted">Gestión de clientes y datos personales.</p>
+        <a href="{{ url_for('cliente.form') }}" class="btn btn-primary">Ir</a>
+      </div>
+    </div>
+  </div>
 
+  <!-- Equipo -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-phone fs-1 text-success mb-3"></i>
+        <h5 class="card-title">Equipo</h5>
+        <p class="card-text text-muted">Registro de equipos asociados a clientes.</p>
+        <a href="{{ url_for('equipo.form') }}" class="btn btn-success">Ir</a>
+      </div>
+    </div>
+  </div>
 
+  {% if has_role('administrador') %}
+  <!-- Administración -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-people-gear fs-1 text-danger mb-3"></i>
+        <h5 class="card-title">Administración</h5>
+        <p class="card-text text-muted">Usuarios, roles y asignaciones.</p>
+        <a href="{{ url_for('admin.panel') }}" class="btn btn-danger">Abrir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catálogo de servicio -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-list-check fs-1 text-info mb-3"></i>
+        <h5 class="card-title">Catálogo de servicio</h5>
+        <p class="card-text text-muted">Servicios disponibles para órdenes.</p>
+        <a href="{{ url_for('cat_servicio.form') }}" class="btn btn-info text-white">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Repuesto -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-cpu fs-1 text-warning mb-3"></i>
+        <h5 class="card-title">Repuesto</h5>
+        <p class="card-text text-muted">Gestión de repuestos en inventario.</p>
+        <a href="{{ url_for('repuesto.form') }}" class="btn btn-warning text-white">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalle servicio -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-tools fs-1 text-info mb-3"></i>
+        <h5 class="card-title">Detalle servicio</h5>
+        <p class="card-text text-muted">Servicios aplicados en una orden.</p>
+        <a href="{{ url_for('detalle_servicio.form') }}" class="btn btn-info text-white">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalle repuesto -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-bag-check fs-1 text-danger mb-3"></i>
+        <h5 class="card-title">Detalle repuesto</h5>
+        <p class="card-text text-muted">Repuestos usados en la reparación.</p>
+        <a href="{{ url_for('detalle_repuesto.form') }}" class="btn btn-danger">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Caja -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-safe2 fs-1 text-secondary mb-3"></i>
+        <h5 class="card-title">Caja</h5>
+        <p class="card-text text-muted">Apertura y cierre de caja diaria.</p>
+        <a href="{{ url_for('caja.form') }}" class="btn btn-secondary">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movimiento de caja -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-arrow-left-right fs-1 text-dark mb-3"></i>
+        <h5 class="card-title">Movimiento de caja</h5>
+        <p class="card-text text-muted">Registra ingresos y egresos de caja.</p>
+        <a href="{{ url_for('mov_caja.form') }}" class="btn btn-dark">Ir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comprobante -->
+  <div class="col">
+    <div class="card h-100 shadow-sm border-0 text-center">
+      <div class="card-body">
+        <i class="bi bi-journal-text fs-1 text-primary mb-3"></i>
+        <h5 class="card-title">Comprobantes</h5>
+        <p class="card-text text-muted">Consulta e impresión de comprobantes.</p>
+        <a href="{{ url_for('comprobante.form') }}" class="btn btn-primary">Ir</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- Nota de ayuda -->
+<div class="mt-4 text-muted small">
+  <i class="bi bi-info-circle me-1"></i>
+  Las <strong>Órdenes</strong> incluyen el registro de <strong>abonos</strong> dentro del mismo flujo.
+</div>
+
+<!-- JS local para imprimir OT rápida -->
+<script>
+  function gotoImprimirOT() {
+    const v = (document.getElementById('ot-print-id').value || '').trim();
+    if (!v) return;
+    window.location.href = `/orden/imprimir/${encodeURIComponent(v)}`;
+  }
+</script>
+{% endblock %}
 

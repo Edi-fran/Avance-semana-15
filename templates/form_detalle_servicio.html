@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Detalle Servicio{% endblock %}
+{% block content %}
+<h2>Detalle Servicio</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Orden*<input type="number" name="id_orden"></label>
+    <label>ID Servicio*<input type="number" name="id_servicio"></label>
+    <label>Cantidad<input type="number" name="cantidad"></label>
+    <label>Precio Unitario<input type="number" name="precio_unit"></label>
+    <label>Subtotal<input type="number" name="subtotal"></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

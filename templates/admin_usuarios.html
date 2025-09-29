@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Administración · Usuarios y Roles{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h3 class="mb-0">Usuarios y Roles</h3>
+    <small class="text-muted">Asigna <strong>administrador</strong> o <strong>facturador</strong> a cada usuario.</small>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre completo</th>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th class="text-center">Rol</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usuarios %}
+            <tr>
+              <td class="text-muted">{{ u.id_usuario }}</td>
+              <td>{{ u.nombre_completo }}</td>
+              <td><span class="badge text-bg-secondary">{{ u.usuario_login }}</span></td>
+              <td>{{ u.email }}</td>
+              <td>
+                {% if u.activo %}<span class="badge text-bg-success">Activo</span>
+                {% else %}<span class="badge text-bg-danger">Inactivo</span>{% endif %}
+              </td>
+              <td class="text-center">
+                <form class="d-flex gap-2 justify-content-center" method="post"
+                      action="{{ url_for('admin.set_rol', id_usuario=u.id_usuario) }}">
+                  <select name="rol" class="form-select form-select-sm" style="max-width:220px;">
+                    {% for r in roles %}
+                      <option value="{{ r.nombre|lower }}"
+                        {% if u.rol_actual and (u.rol_actual|lower == r.nombre|lower) %}selected{% endif %}>
+                        {{ r.nombre|capitalize }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  <button class="btn btn-sm btn-primary" type="submit">
+                    <i class="bi bi-save"></i> Guardar
+                  </button>
+                </form>
+              </td>
+              <td class="text-end">
+                <!-- Futuras acciones: activar/desactivar, reset clave, etc. -->
+                <button class="btn btn-sm btn-outline-secondary" disabled title="Próximamente">
+                  <i class="bi bi-gear"></i>
+                </button>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">No hay usuarios.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

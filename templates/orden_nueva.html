@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Nueva Orden{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-3">Nueva Orden de Trabajo</h3>
+
+<form class="card shadow-sm border-0" method="post" action="{{ url_for('orden.crear') }}">
+  <div class="card-body">
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Cliente</label>
+        <select name="id_cliente" class="form-select" required>
+          <option value="">-- Selecciona --</option>
+          {% for c in clientes %}
+            <option value="{{ c.id_cliente }}">{{ c.nombre }} ({{ c.identificacion }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Equipo recibido (opcional)</label>
+        <select name="id_equipo" class="form-select">
+          <option value="">-- Ninguno --</option>
+          {% for e in equipos %}
+            <option value="{{ e.id_equipo }}">
+              {{ e.cliente }} — {{ e.modelo or 's/modelo' }}{% if e.imei %} · IMEI: {{ e.imei }}{% endif %}{% if e.serie %} · Serie: {{ e.serie }}{% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Descripción / Diagnóstico</label>
+        <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+      </div>
+
+      {% if ordc.tecnico_col %}
+      <div class="col-md-6">
+        <label class="form-label">Técnico asignado</label>
+        <select name="id_tecnico" class="form-select">
+          <option value="">-- Sin asignar --</option>
+          {% for t in tecnicos %}
+            <option value="{{ t.id_usuario }}">{{ t.nombre_completo or t.usuario_login }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <div class="col-md-6">
+        <label class="form-label">Abono inicial (opcional)</label>
+        <input type="number" step="0.01" min="0" name="abono_monto" class="form-control" placeholder="0.00">
+        <div class="form-text">La fecha del abono se guarda automáticamente.</div>
+      </div>
+
+      <hr class="mt-3 mb-1">
+
+      {% if ordc.prestado_id %}
+      <div class="col-12">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" value="1" id="sw-prestar" name="prestar_equipo">
+          <label class="form-check-label" for="sw-prestar">Prestar equipo al cliente</label>
+        </div>
+      </div>
+
+      <div id="zona-prestamo" class="row g-3 d-none">
+        <div class="col-md-6">
+          <label class="form-label">Equipo prestado (existente)</label>
+          <select name="equipo_prestado_id" class="form-select">
+            <option value="">-- Ninguno --</option>
+            {% for e in equipos %}
+              <option value="{{ e.id_equipo }}">
+                {{ e.cliente }} — {{ e.modelo or 's/modelo' }}{% if e.imei %} · IMEI: {{ e.imei }}{% endif %}{% if e.serie %} · Serie: {{ e.serie }}{% endif %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-6"></div>
+
+        <div class="col-md-4">
+          <label class="form-label">Modelo (nuevo)</label>
+          <input type="text" name="prest_modelo" class="form-control" placeholder="Ej. Galaxy A10">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">IMEI (nuevo)</label>
+          <input type="text" name="prest_imei" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Serie (nuevo)</label>
+          <input type="text" name="prest_serie" class="form-control">
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+  <div class="card-footer bg-white text-end">
+    <a class="btn btn-outline-secondary" href="{{ url_for('index') }}"><i class="bi bi-arrow-left-circle me-1"></i>Cancelar</a>
+    <button class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>Crear Orden</button>
+  </div>
+</form>
+
+<script>
+  const sw = document.getElementById('sw-prestar');
+  if (sw){
+    const zona = document.getElementById('zona-prestamo');
+    sw.addEventListener('change', () => zona.classList.toggle('d-none', !sw.checked));
+  }
+</script>
+{% endblock %}
+

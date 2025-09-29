@@ -1,8 +1,4 @@
-﻿/* Fondo suave y tipografía */
-:root{
-  --uea-c1: #0b5ed7;
-  --uea-c2: #22d3ee;
-}
+﻿
 .bg-body{ background: #f7f9fc; }
 
 /* Marca en navbar */
@@ -12,49 +8,6 @@
   display:inline-block
 }
 
-/* Logo UEA responsivo */
-.logo-uea{ height:54px; max-width:100%; object-fit:contain }
-
-/* Gradiente institucional del header */
-.bg-gradient-uea{
-  background: linear-gradient(180deg, rgba(13,110,253,0.08), rgba(255,255,255,0));
-}
-
-/* Hero surface y card “glass” */
-.hero-surface{
-  background:
-    radial-gradient(800px 400px at -10% -10%, rgba(13,110,253,.15), transparent 60%),
-    radial-gradient(600px 300px at 110% 0%, rgba(34,211,238,.12), transparent 50%);
-}
-.card-glass{
-  border:1px solid rgba(0,0,0,.08);
-  backdrop-filter: blur(6px);
-  background: rgba(255,255,255,.6);
-  border-radius: 18px;
-}
-
-/* Texto con gradiente UEA */
-.text-gradient{
-  background: linear-gradient(90deg,var(--uea-c1),var(--uea-c2));
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-}
-
-/* Icono redondo para features */
-.icon-bubble{
-  width:54px;height:54px;border-radius:50%;
-  display:inline-grid;place-items:center;
-  background: #fff;border:1px solid rgba(0,0,0,.08);
-  box-shadow: 0 8px 24px rgba(0,0,0,.06);
-  font-size:1.25rem
-}
-
-/* Tarjeta de feature */
-.feature-card{ background:#fff; box-shadow:0 8px 24px rgba(0,0,0,.05) }
-.fullscreen {
-    min-height: 100vh; /* 100% del alto de la ventana */
-    display: flex;
-    flex-direction: column;
-}
 html, body {
     margin: 0;
     padding: 0;
@@ -71,8 +24,8 @@ html, body {
 
 
 .image-container {
-    max-width: 1800px;       /* Ancho máximo del contenedor */
-    margin: 20px auto;      /* Centrado con margen */
+    max-width: 1800px;       
+    margin: 20px auto;      
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -81,14 +34,14 @@ html, body {
 }
 
 .responsive-image {
-    width: 100%;            /* Ocupa el 100% del contenedor */
-    height: auto;           /* Altura proporcional */
+    width: 100%;            
+    height: auto;           
     border-radius: 8px;
-    transition: transform 0.3s ease; /* Efecto hover suave */
+    transition: transform 0.3s ease; 
 }
 
 .responsive-image:hover {
-    transform: scale(1.02); /* Zoom leve al pasar el mouse */
+    transform: scale(1.02); 
 }
 
 .image-caption {
@@ -102,7 +55,15 @@ html, body {
 /* Responsive para móviles */
 @media (max-width: 600px) {
     .image-container {
-        max-width: 90%;     /* Reducción en pantallas pequeñas */
+        max-width: 90%;     
         padding: 10px;
     }
+}
+.fw-semibold text-uppercase
+{
+text-align: center;
+}
+
+.bg-body{
+  text-align: justify;
 }

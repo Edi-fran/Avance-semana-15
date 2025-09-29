@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Factura #{{ data.id_comprobante }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h4 class="mb-0">{{ config.get('NEGOCIO_NOMBRE','Repair-Cell') }}</h4>
+        <div class="text-muted small">
+          RUC: {{ config.get('NEGOCIO_RUC','—') }} · {{ config.get('NEGOCIO_DIR','') }} · {{ config.get('NEGOCIO_TEL','') }}
+        </div>
+      </div>
+      <div class="text-end">
+        <div class="fw-bold">FACTURA</div>
+        <div class="small text-muted">N° {{ data.id_comprobante }}</div>
+        <div class="small text-muted">Fecha: {{ data.creado_en }}</div>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col">
+        <div class="text-muted small">Cliente</div>
+        <div class="fw-semibold">{{ data.cli_nombre }}</div>
+        <div class="small text-muted">CI/RUC: {{ data.cli_cedula or '—' }} · Tel: {{ data.cli_tel or '—' }}</div>
+        <div class="small text-muted">Email: {{ data.cli_email or '—' }}</div>
+      </div>
+      <div class="col text-end">
+        <div class="text-muted small">Orden</div>
+        <div class="fw-semibold">#{{ data.id_orden }}</div>
+      </div>
+    </div>
+
+    <div class="table-responsive mt-3">
+      <table class="table table-sm align-middle">
+        <thead><tr><th>Tipo</th><th>Descripción</th><th class="text-end">Cant</th><th class="text-end">P.Unit</th><th class="text-end">Importe</th></tr></thead>
+        <tbody>
+          {% for it in items %}
+          <tr>
+            <td>{{ it.tipo }}</td>
+            <td>{{ it.descripcion }}</td>
+            <td class="text-end">{{ '%.2f'|format(it.cantidad) }}</td>
+            <td class="text-end">{{ '%.2f'|format(it.precio_unitario) }}</td>
+            <td class="text-end">{{ '%.2f'|format(it.cantidad * it.precio_unitario) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <div style="min-width:260px">
+        <div class="d-flex justify-content-between"><span>Subtotal</span><span class="fw-semibold">{{ '%.2f'|format(data.subtotal) }}</span></div>
+        <div class="d-flex justify-content-between"><span>IVA ({{ iva_pct }}%)</span><span class="fw-semibold">{{ '%.2f'|format(data.iva) }}</span></div>
+        <hr class="my-2">
+        <div class="d-flex justify-content-between fs-5"><span>Total</span><span class="fw-bold">{{ '%.2f'|format(data.total) }}</span></div>
+      </div>
+    </div>
+
+    <div class="mt-4 d-print-none">
+      <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer me-1"></i>Imprimir</button>
+      <a class="btn btn-outline-secondary ms-2" href="{{ url_for('index') }}">Volver</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

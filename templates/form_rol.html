@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Rol{% endblock %}
+{% block content %}
+<h2>Rol</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>Nombre<input type="text" name="nombre"></label>
+    <label>Descripción<textarea name="descripcion" rows="3"></textarea></label>
+    <label>Activo (0/1)<input type="number" name="activo"></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

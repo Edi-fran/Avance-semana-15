@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if mode=='edit' else 'Nuevo' }} · Catálogo de servicio{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-xl-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-md-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h3 class="mb-0">
+              <i class="bi bi-list-check me-2"></i>{{ 'Editar' if mode=='edit' else 'Nuevo' }} catálogo de servicio
+            </h3>
+            <small class="text-muted">Tabla: <code>{{ tabla }}</code></small>
+          </div>
+          <a class="btn btn-outline-secondary" href="{{ url_for('index') }}">
+            <i class="bi bi-arrow-left me-1"></i> Volver
+          </a>
+        </div>
+
+        {% with msgs = get_flashed_messages(with_categories=true) %}
+          {% if msgs %}
+            <div class="mb-3">
+              {% for cat, m in msgs %}
+                <div class="alert alert-{{ 'info' if cat not in ['primary','secondary','success','danger','warning','info','light','dark'] else cat }} alert-dismissible fade show">
+                  {{ m }}
+                  <button class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="post" action="{{ url_for('cat_servicio.guardar') }}" class="row g-3">
+          {% if pk %}<input type="hidden" name="{{ pk }}" value="{{ values[pk] }}">{% endif %}
+
+          {% for col in cols %}
+            {% set name = col.name %}
+            {% if name not in audit_cols %}
+              {% set spec = specs[name] %}
+              {% set required = (not col.is_nullable) and (not spec.is_ai) %}
+              {% set val = values[name] %}
+
+              {% if spec.is_ai %}
+                {% if mode == 'edit' %}
+                <div class="col-12 col-md-4">
+                  <label class="form-label">{{ name }} <span class="text-muted small">(Auto)</span></label>
+                  <input class="form-control" value="{{ val }}" readonly>
+                </div>
+                {% endif %}
+              {% else %}
+                <div class="col-12 col-md-6">
+                  <label class="form-label">{{ name }}{% if required %} *{% endif %}</label>
+
+                  {% if spec.kind == 'textarea' %}
+                    <textarea class="form-control" rows="3" name="{{ name }}" {% if required %}required{% endif %}>{{ val }}</textarea>
+
+                  {% elif spec.kind == 'select' and spec.options %}
+                    <select class="form-select" name="{{ name }}" {% if required %}required{% endif %}>
+                      <option value="">-- Selecciona --</option>
+                      {% for opt in spec.options %}
+                        <option value="{{ opt }}" {% if val == opt %}selected{% endif %}>{{ opt }}</option>
+                      {% endfor %}
+                    </select>
+
+                  {% elif spec.kind == 'checkbox' %}
+                    <div class="form-check mt-2">
+                      <input class="form-check-input" type="checkbox" id="chk_{{ name }}" name="{{ name }}" {% if val %}checked{% endif %}>
+                      <label class="form-check-label" for="chk_{{ name }}">Sí / No</label>
+                    </div>
+
+                  {% else %}
+                    <input
+                      class="form-control"
+                      name="{{ name }}"
+                      {% if spec.type %}type="{{ spec.type }}"{% endif %}
+                      {% if spec.step %}step="{{ spec.step }}"{% endif %}
+                      value="{{ val }}"
+                      {% if required %}required{% endif %}>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="col-12 d-flex gap-2 pt-2">
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-save me-1"></i> Guardar
+            </button>
+            <a class="btn btn-secondary" href="{{ url_for('index') }}">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <p class="text-center text-muted small mt-3 mb-0">Los campos marcados con * son obligatorios.</p>
+  </div>
+</div>
+{% endblock %}

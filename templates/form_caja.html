@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Caja{% endblock %}
+{% block content %}
+<h2>Caja</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Usuario*<input type="number" name="id_usuario"></label>
+    <label>Fecha Apertura<input type="datetime-local" name="fecha_apertura"></label>
+    <label>Fecha Cierre<input type="datetime-local" name="fecha_cierre"></label>
+    <label>Saldo Inicial<input type="number" name="saldo_inicial"></label>
+    <label>Saldo Final<input type="number" name="saldo_final"></label>
+    <label>Estado<input type="text" name="estado"></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

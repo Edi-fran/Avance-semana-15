@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Repuesto{% endblock %}
+{% block content %}
+<h2>Repuesto</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>Nombre<input type="text" name="nombre"></label>
+    <label>Compatibilidad<input type="text" name="compatibilidad"></label>
+    <label>Costo Ref<input type="number" name="costo_ref"></label>
+    <label>Precio Ref<input type="number" name="precio_ref"></label>
+    <label>Stock Actual<input type="number" name="stock_actual"></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

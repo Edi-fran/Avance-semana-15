@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Mov Caja{% endblock %}
+{% block content %}
+<h2>Mov Caja</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Caja*<input type="number" name="id_caja"></label>
+    <label>Fecha/Hora<input type="datetime-local" name="fecha_hora"></label>
+    <label>Tipo (ingreso/egreso)<input type="text" name="tipo"></label>
+    <label>Concepto<input type="text" name="concepto"></label>
+    <label>Monto<input type="number" name="monto"></label>
+    <label>Método<input type="text" name="metodo"></label>
+    <label>Referencia<input type="text" name="referencia"></label>
+    <label>ID Abono<input type="number" name="id_abono"></label>
+    <label>ID Compra<input type="number" name="id_compra"></label>
+    <label>Observación<textarea name="observacion" rows="3"></textarea></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

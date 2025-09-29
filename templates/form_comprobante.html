@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Comprobante{% endblock %}
+{% block content %}
+<h2>Comprobante</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Orden*<input type="number" name="id_orden"></label>
+    <label>Tipo<input type="text" name="tipo"></label>
+    <label>Número<input type="text" name="numero"></label>
+    <label>Fecha Emisión<input type="datetime-local" name="fecha_emision"></label>
+    <label>Subtotal<input type="number" name="subtotal"></label>
+    <label>Impuesto<input type="number" name="impuesto"></label>
+    <label>Total<input type="number" name="total"></label>
+    <label>Estado<input type="text" name="estado"></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Abono{% endblock %}
+{% block content %}
+<h2>Abono</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Orden*<input type="number" name="id_orden"></label>
+    <label>Fecha<input type="datetime-local" name="fecha"></label>
+    <label>Monto<input type="number" name="monto"></label>
+    <label>Método<input type="text" name="metodo"></label>
+    <label>Referencia<input type="text" name="referencia"></label>
+    <label>Estado<input type="text" name="estado"></label>
+    <label>Observación<textarea name="observacion" rows="3"></textarea></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

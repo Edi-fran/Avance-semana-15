@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Auditoria{% endblock %}
+{% block content %}
+<h2>Auditoria</h2>
+<form class="form" method="post" action="guardar">
+  <div class="grid">
+    <label>ID Usuario<input type="number" name="id_usuario"></label>
+    <label>ID Sesión<input type="number" name="id_sesion"></label>
+    <label>Fecha/Hora<input type="datetime-local" name="fecha_hora"></label>
+    <label>Entidad<input type="text" name="entidad"></label>
+    <label>Entidad ID<input type="number" name="entidad_id"></label>
+    <label>Acción<input type="text" name="accion"></label>
+    <label>Resumen<input type="text" name="resumen"></label>
+    <label>Antes (JSON)<textarea name="antes_json" rows="3"></textarea></label>
+    <label>Después (JSON)<textarea name="despues_json" rows="3"></textarea></label>
+  </div>
+  <div class="actions">
+    <button class="btn primary" type="submit">Guardar</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
